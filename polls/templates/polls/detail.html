@@ -1,0 +1,33 @@
+{% extends 'polls/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<h1>{{ object.name }} Feedback</h1>
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% regroup questions by question__text as question_list %}
+
+<p>
+<form action="{% url 'polls:vote' object.id %}" method="post">
+{% csrf_token %}
+{% for question in question_list %}
+<div class="question-box">
+    <h3>{{ question.grouper }}</h3>
+        {% for choice in question.list %}
+        <label for="choice{{ forloop.counter }}-{{choice.question_id}}">
+          <input type="radio" name="question-{{choice.question_id}}" id="choice{{ forloop.counter }}-{{choice.question_id}}" value="{{ choice.id }}" />
+          {{ choice.choice }}
+          {% with "polls/img/"|add:choice.choice_text|add:".png" as img_url %}
+          <img src="{% static img_url %}" />
+          {% endwith %}
+        </label>
+        {% endfor %}
+</div>
+{% endfor %}
+<input type="submit" value="Vote" />
+
+</form>
+</p>
+{% endblock %}

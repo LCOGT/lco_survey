@@ -1,0 +1,21 @@
+{% extends 'polls/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<h1>{{ object.name }} Feedback</h1>
+
+{% regroup answers by question__text as question_list %}
+
+<ul>
+  {% for question in question_list %}
+      <h3>{{ question.grouper }}</h3>
+          {% for choice in question.list %}
+          {% with "polls/img/"|add:choice.choice_text|add:".png" as img_url %}
+          <li><img src="{% static img_url %}" /> {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+          {% endwith %}
+          {% endfor %}
+  {% endfor %}
+</ul>
+
+<a href="{% url 'polls:detail' object.id %}">Vote again?</a>
+{% endblock %}
