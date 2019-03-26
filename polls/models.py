@@ -21,6 +21,7 @@ class Survey(models.Model):
     startdate = models.DateTimeField()
     enddate = models.DateTimeField()
     answer = models.ManyToManyField(Question, through="Choice")
+    cookie_name = models.CharField(max_length=20, help_text="Should start 'lco_fb_'")
 
     def __str__(self):
         return "{} {} - {}".format(self.name, self.startdate.strftime("%Y-%m-%d"), self.enddate.strftime("%Y-%m-%d"))

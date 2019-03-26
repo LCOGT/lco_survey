@@ -9,6 +9,7 @@
 
 {% regroup questions by question__text as question_list %}
 
+{% if answered %}<h1>ANSWERED</h1>{% endif %}
 <p>
 <form action="{% url 'polls:vote' object.id %}" method="post">
 {% csrf_token %}

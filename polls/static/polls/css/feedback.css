@@ -17,15 +17,13 @@
 }
 
 .question-box {
-  background-color: #5DADE2;
+  background-color: #AED6F1;
   border-radius: 25px;
   padding: 20px;
   margin:20px;
-  color:#fff;
+  color:#555;
 }
-h3,label {
-  color:#fff;
-}
+
 
 body {
 	font-family: 'Affogato-Regular', 'Helvetica Neue', Helvetica, Arial, sans-serif;

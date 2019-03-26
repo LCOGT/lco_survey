@@ -32,6 +32,9 @@ class DetailView(generic.DetailView):
             tmp_q['choice'] = choices[q['choice_text']]
             qs.append(tmp_q)
         context['questions'] = qs
+        cookie = self.request.COOKIES.get(self.object.cookie_name, None)
+        if cookie and cookie == str(self.object.id):
+            context['answered'] = True
         return context
 
 class ResultsView(generic.DetailView):
@@ -74,4 +77,8 @@ def vote(request, id):
             ch.votes += 1
             ch.save()
 
-    return HttpResponseRedirect(reverse('polls:results', args=(s.id,)))
+    response = HttpResponseRedirect(reverse('polls:results', args=(s.id,)))
+    if not request.COOKIES.get(s.cookie_name, None):
+        response.set_cookie(s.cookie_name, s.id, max_age=31536000)
+
+    return response
