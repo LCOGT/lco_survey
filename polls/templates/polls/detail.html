@@ -9,26 +9,38 @@
 
 {% regroup questions by question__text as question_list %}
 
-{% if answered %}<h1>ANSWERED</h1>{% endif %}
+{% if answered %}
+<p>You have previously answered this survey.</p>
+<p>Return to <a href="https://lco.global">Las Cumbres Observatory</a></p>
+{% else %}
 <p>
+  After using robotic telescopes or robotic telescope data as part of this project,
+  please tell us how much you agree with these statements.</p>
 <form action="{% url 'polls:vote' object.id %}" method="post">
 {% csrf_token %}
 {% for question in question_list %}
-<div class="question-box">
-    <h3>{{ question.grouper }}</h3>
+    <h2>{{ question.grouper }}</h2>
+    <div class="question-box">
+      <div class="emoji-row">
         {% for choice in question.list %}
+        <div class="emoji-container">
         <label for="choice{{ forloop.counter }}-{{choice.question_id}}">
           <input type="radio" name="question-{{choice.question_id}}" id="choice{{ forloop.counter }}-{{choice.question_id}}" value="{{ choice.id }}" />
-          {{ choice.choice }}
           {% with "polls/img/"|add:choice.choice_text|add:".png" as img_url %}
           <img src="{% static img_url %}" />
           {% endwith %}
         </label>
+        <div class="choice">
+          {{ choice.choice }}
+        </div>
+        </div>
         {% endfor %}
-</div>
+      </div>
+  </div>
 {% endfor %}
-<input type="submit" value="Vote" />
+<input type="submit" value="Vote" class="button button1" />
 
 </form>
+{% endif %}
 </p>
 {% endblock %}

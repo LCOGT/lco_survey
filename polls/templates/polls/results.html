@@ -9,11 +9,22 @@
 <ul>
   {% for question in question_list %}
       <h3>{{ question.grouper }}</h3>
+      <div class="question-box">
+          <div class="emoji-row">
           {% for choice in question.list %}
+          <div class="emoji-container">
           {% with "polls/img/"|add:choice.choice_text|add:".png" as img_url %}
-          <li><img src="{% static img_url %}" /> {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+          <div class="emoji">
+            <img src="{% static img_url %}" />
+          </div>
+          <div class="votes">
+            {{ choice.votes }} vote{{ choice.votes|pluralize }}
+          </div>
           {% endwith %}
+          </div>
           {% endfor %}
+          </div>
+      </div>
   {% endfor %}
 </ul>
 
