@@ -12,7 +12,6 @@ Environment variables needed for production:
 `DB_USER` - database username
 `DB_PASS` - database user's password
 `DB_HOST` - database host
-`USE_S3` - If using S3 for static storage set as `True`
 
 ## Build
 
