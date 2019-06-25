@@ -126,10 +126,3 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/var/www/static/',
 ]
-
-if not BASE_DIR.startswith('/app'):
-    try:
-        from .local_settings import *
-    except ImportError as e:
-        if "local_settings" not in str(e):
-            raise e
