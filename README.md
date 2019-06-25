@@ -4,8 +4,15 @@ Django app to collect feedback on our education programme.
 
 ## Configuration
 
-TODO: Edward to implement and document all enviroment variables used for
-configuration.
+Environment variables needed for production:
+
+`SECRET_KEY` - Django secret key
+`DEBUG` - Debug flag `True/False`
+`DB_NAME` - database name
+`DB_USER` - database username
+`DB_PASS` - database user's password
+`DB_HOST` - database host
+`USE_S3` - If using S3 for static storage set as `True`
 
 ## Build
 

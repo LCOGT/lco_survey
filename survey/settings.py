@@ -11,19 +11,20 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import ast
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.utils.crypto import get_random_string
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+SECRET_KEY = os.environ.get('SECRET_KEY','')
+if not SECRET_KEY:
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    SECRET_KEY = get_random_string(50, chars)
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h!$kkw%%!d+)gn&o3lg+5vb(+$ah__d1%u5!6g24u$8sdvb8d3'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = ast.literal_eval(os.environ.get('DEBUG', 'False'))
 
 ALLOWED_HOSTS = []
 
@@ -76,10 +77,13 @@ WSGI_APPLICATION = 'survey.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.environ.get('DB_NAME', ''),
+        "USER": os.environ.get('DB_USER', ''),
+        "PASSWORD": os.environ.get('DB_PASS', ''),
+        "HOST": os.environ.get('DB_HOST', ''),
+        "ENGINE": "django.db.backends.mysql",
+        }
     }
-}
 
 
 # Password validation
