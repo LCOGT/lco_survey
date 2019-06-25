@@ -82,6 +82,7 @@ DATABASES = {
         "PASSWORD": os.environ.get('DB_PASS', ''),
         "HOST": os.environ.get('DB_HOST', ''),
         "ENGINE": "django.db.backends.mysql",
+        "PORT"   : '3306',
         }
     }
 
@@ -129,7 +130,7 @@ STATICFILES_DIRS = [
 ]
 
 # AWS S3 is another supported option for media files
-if str2bool(os.getenv('USE_S3', 'False')):
+if ast.literal_eval(os.getenv('USE_S3', 'False')):
     USE_S3 = True
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
