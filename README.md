@@ -6,12 +6,14 @@ Django app to collect feedback on our education programme.
 
 Environment variables needed for production:
 
-`SECRET_KEY` - Django secret key
-`DEBUG` - Debug flag `True/False`
-`DB_NAME` - database name
-`DB_USER` - database username
-`DB_PASS` - database user's password
-`DB_HOST` - database host
+Name | Description | Default Value
+--- | --- | ---
+`SECRET_KEY` | Django Secret Key (required) | N/A
+`DEBUG` | Enable Django Debug mode | `False`
+`DB_HOST` | PostgreSQL Database Hostname (required) | N/A
+`DB_NAME` | PostgreSQL Database Name (required) | N/A
+`DB_USER` | PostgreSQL Database Username (required) | N/A
+`DB_PASS` | PostgreSQL Database Password (required) | N/A
 
 ## Build
 
