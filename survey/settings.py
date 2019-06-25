@@ -18,7 +18,6 @@ from django.utils.crypto import get_random_string
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 SECRET_KEY = os.environ.get('SECRET_KEY','')
 if not SECRET_KEY:
     chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
@@ -145,7 +144,7 @@ if ast.literal_eval(os.getenv('USE_S3', 'False')):
     MEDIA_URL = f'https://s3-{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'core.storage_backends.PublicMediaStorage'
 
-if not CURRENT_PATH.startswith('/app'):
+if not BASE_DIR.startswith('/app'):
     try:
         from .local_settings import *
     except ImportError as e:
