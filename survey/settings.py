@@ -25,7 +25,7 @@ if not SECRET_KEY:
 
 DEBUG = ast.literal_eval(os.environ.get('DEBUG', 'False'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
