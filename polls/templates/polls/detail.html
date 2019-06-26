@@ -5,7 +5,11 @@
 <h1>{{ object.name }} Feedback</h1>
 
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if messages %}
+    {% for message in messages %}
+    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    {% endfor %}
+{% endif %}
 
 {% regroup questions by question__text as question_list %}
 

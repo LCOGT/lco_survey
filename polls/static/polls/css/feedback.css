@@ -3,6 +3,12 @@ body {
   text-align: center;
 }
 
+.error {
+  background-color: #EA563C;
+  color:#fff;
+  font-size: 2em;
+}
+
 /* HIDE RADIO */
 [type=radio] {
   position: absolute;

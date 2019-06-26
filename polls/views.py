@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
+from django.contrib import messages
 
 from .models import Choice, Question, Survey, LIKERT_CHOICES
 
@@ -23,7 +24,7 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
+        # Add in a QuerySet of all the questions
         questions = self.object.choice_set.all().values('id','question_id','question__text','choice_text','choice_text')
         qs = []
         choices = dict(LIKERT_CHOICES)
@@ -56,22 +57,19 @@ def vote(request, id):
     question_ids = s.answer.all().distinct().values_list('id', flat=True)
     field_names = ['question-{}'.format(i) for i in question_ids]
     for field_id in field_names:
-        choice_id = request.POST[field_id]
+        choice_id = request.POST.get(field_id,'999')
         try:
             selected_choice = s.choice_set.get(pk=choice_id)
         except (KeyError, Choice.DoesNotExist):
             # Redisplay the poll voting form.
-            error = {
-                'poll': s,
-                'error_message': "You didn't select a choice.",
-            }
+            error = "Please select answers for all questions"
         else:
             good_choices.append(selected_choice)
-            # Always return an HttpResponseRedirect after successfully dealing
-            # with POST data. This prevents data from being posted twice if a
-            # user hits the Back button.
+
     if error:
-        return render(request, 'polls/detail.html', error)
+        messages.error(request,error)
+        return HttpResponseRedirect(reverse('polls:detail', args=(s.id,)))
+        # return render(request, 'polls/detail.html', error)
     else:
         for ch in good_choices:
             ch.votes += 1
