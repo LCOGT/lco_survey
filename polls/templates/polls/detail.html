@@ -30,9 +30,7 @@
         <div class="emoji-container">
         <label for="choice{{ forloop.counter }}-{{choice.question_id}}">
           <input type="radio" name="question-{{choice.question_id}}" id="choice{{ forloop.counter }}-{{choice.question_id}}" value="{{ choice.id }}" />
-          {% with "polls/img/"|add:choice.choice_text|add:".png" as img_url %}
-          <img src="{% static img_url %}" />
-          {% endwith %}
+          <img src="{% static choice.icon %}" />
         </label>
         <div class="choice">
           {{ choice.choice }}

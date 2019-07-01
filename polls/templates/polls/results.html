@@ -13,14 +13,12 @@
           <div class="emoji-row">
           {% for choice in question.list %}
           <div class="emoji-container">
-          {% with "polls/img/"|add:choice.choice_text|add:".png" as img_url %}
           <div class="emoji">
-            <img src="{% static img_url %}" />
+            <img src="{% static choice.icon %}" />
           </div>
           <div class="votes">
             {{ choice.votes }} vote{{ choice.votes|pluralize }}
           </div>
-          {% endwith %}
           </div>
           {% endfor %}
           </div>

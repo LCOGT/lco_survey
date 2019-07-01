@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from django.contrib import messages
 
-from .models import Choice, Question, Survey, LIKERT_CHOICES
-
+from .models import Choice, Question, Survey, LIKERT_CHOICES, LIKERT_ICONS
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -25,12 +24,13 @@ class DetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the questions
-        questions = self.object.choice_set.all().values('id','question_id','question__text','choice_text','choice_text')
+        questions = self.object.choice_set.all().values('id','question_id','question__text','choice')
         qs = []
         choices = dict(LIKERT_CHOICES)
         for q in questions:
             tmp_q = q
-            tmp_q['choice'] = choices[q['choice_text']]
+            tmp_q['icon'] = LIKERT_ICONS[q['choice']]
+            tmp_q['choice'] = choices[q['choice']]
             qs.append(tmp_q)
         context['questions'] = qs
         cookie = self.request.COOKIES.get(self.object.cookie_name, None)
@@ -46,8 +46,13 @@ class ResultsView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['answers'] = self.object.choice_set.all().values('question_id','question__text','choice_text','id','votes')
+        answers = self.object.choice_set.all().values('question_id','question__text','choice','id','votes')
+        qs = []
+        for a in answers:
+            tmpq = a
+            tmpq['icon'] = LIKERT_ICONS[a['choice']]
+            qs.append(tmpq)
+        context['answers'] = qs
         return context
 
 def vote(request, id):
