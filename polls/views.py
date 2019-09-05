@@ -2,18 +2,24 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib import messages
 
 from .models import Choice, Question, Survey, LIKERT_CHOICES, LIKERT_ICONS
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'active_survey_list'
 
     def get_queryset(self):
         return Survey.objects.all()
 
+class ThanksView(generic.DetailView):
+    slug_url_kwarg = 'id'
+    slug_field = 'id'
+    model = Survey
+    template_name = 'polls/thanks.html'
 
 class DetailView(generic.DetailView):
     slug_url_kwarg = 'id'
@@ -38,7 +44,7 @@ class DetailView(generic.DetailView):
             context['answered'] = True
         return context
 
-class ResultsView(generic.DetailView):
+class ResultsView(LoginRequiredMixin, generic.DetailView):
     slug_url_kwarg = 'id'
     slug_field = 'id'
     model = Survey
@@ -74,13 +80,12 @@ def vote(request, id):
     if error:
         messages.error(request,error)
         return HttpResponseRedirect(reverse('polls:detail', args=(s.id,)))
-        # return render(request, 'polls/detail.html', error)
     else:
         for ch in good_choices:
             ch.votes += 1
             ch.save()
 
-    response = HttpResponseRedirect(reverse('polls:results', args=(s.id,)))
+    response = HttpResponseRedirect(reverse('polls:thanks', args=(s.id,)))
     if not request.COOKIES.get(s.cookie_name, None):
         response.set_cookie(s.cookie_name, s.id, max_age=31536000)
 
