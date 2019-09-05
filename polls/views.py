@@ -1,4 +1,6 @@
 #-*- coding: utf-8 -*-
+from datetime import datetime
+
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -6,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib import messages
 
-from .models import Choice, Question, Survey, LIKERT_CHOICES, LIKERT_ICONS
+from .models import Choice, Question, Survey, LIKERT_CHOICES, LIKERT_ICONS, Comment
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'polls/index.html'
@@ -84,6 +86,10 @@ def vote(request, id):
         for ch in good_choices:
             ch.votes += 1
             ch.save()
+
+    if request.POST.get('comment',None):
+        newcomment = Comment(text=request.POST.get('comment'), date=datetime.utcnow(),survey=s)
+        newcomment.save()
 
     response = HttpResponseRedirect(reverse('polls:thanks', args=(s.id,)))
     if not request.COOKIES.get(s.cookie_name, None):

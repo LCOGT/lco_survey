@@ -43,3 +43,11 @@ class Choice(models.Model):
 
     class Meta:
         unique_together = ['question','survey','choice']
+
+class Comment(models.Model):
+    text = models.TextField()
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+
+    def __str__(self):
+        return "Comment for {} on {}".format(self.survey, self.date)

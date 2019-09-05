@@ -1,8 +1,11 @@
 #-*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Choice, Question, Survey, LIKERT_CHOICES
+from .models import Choice, Question, Survey, LIKERT_CHOICES, Comment
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['survey','date']
+    list_filter = ['survey',]
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
@@ -30,3 +33,4 @@ class SurveyAdmin(admin.ModelAdmin):
 admin.site.register(Question)
 admin.site.register(Choice)
 admin.site.register(Survey, SurveyAdmin)
+admin.site.register(Comment, CommentAdmin)
