@@ -10,12 +10,12 @@ from django.contrib import messages
 
 from .models import Choice, Question, Survey, LIKERT_CHOICES, LIKERT_ICONS, Comment
 
-class IndexView(LoginRequiredMixin, generic.ListView):
+class IndexView(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'active_survey_list'
 
     def get_queryset(self):
-        return Survey.objects.all()
+        return Survey.objects.filter(active=True)
 
 class ThanksView(generic.DetailView):
     slug_url_kwarg = 'id'
