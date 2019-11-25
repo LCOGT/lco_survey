@@ -32,13 +32,18 @@ class DetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the questions
-        questions = self.object.choice_set.all().values('id','question_id','question__text','choice')
+        # questions = self.object.choice_set.all().values('id','question_id','question__text')
+        questions = Survey.objects.all()[0].choice_set.all().values('question_id','question__text').distinct()
         qs = []
-        choices = dict(LIKERT_CHOICES)
+        lk_choices = dict(LIKERT_CHOICES)
         for q in questions:
-            tmp_q = q
-            tmp_q['icon'] = LIKERT_ICONS[q['choice']]
-            tmp_q['choice'] = choices[q['choice']]
+            tmp_q = dict(q)
+            choices = list(Choice.objects.filter(question=q['question_id']).values_list('choice','id').order_by('choice'))
+            c_dict = {cs[0]:cs[1]for cs in choices}
+            ch_tmp = []
+            for ch in choices:
+                ch_tmp.append({'text' : lk_choices[ch[0]], 'id':ch[1],'icon':LIKERT_ICONS[ch[0]]})
+            tmp_q['choices'] = ch_tmp
             qs.append(tmp_q)
         context['questions'] = qs
         cookie = self.request.COOKIES.get(self.object.cookie_name, None)

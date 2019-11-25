@@ -22,18 +22,18 @@
   please tell us how much you agree with these statements.</p>
 <form action="{% url 'polls:vote' object.id %}" method="post">
 {% csrf_token %}
-{% for question in question_list %}
-    <h2>{{ question.grouper }}</h2>
+{% for question in questions %}
+    <h2>{{ question.text }}</h2>
     <div class="question-box">
       <div class="emoji-row">
-        {% for choice in question.list %}
+        {% for choice in question.choices %}
         <div class="emoji-container">
-        <label for="choice{{ forloop.counter }}-{{choice.question_id}}">
-          <input type="radio" name="question-{{choice.question_id}}" id="choice{{ forloop.counter }}-{{choice.question_id}}" value="{{ choice.id }}" />
+        <label for="choice{{ forloop.counter }}-{{choice.id}}">
+          <input type="radio" name="question-{{question.question_id}}" id="choice{{ forloop.counter }}-{{choice.id}}" value="{{ choice.id }}" />
           <img src="{% static choice.icon %}" />
         </label>
         <div class="choice">
-          {{ choice.choice }}
+          {{ choice.text }}
         </div>
         </div>
         {% endfor %}
