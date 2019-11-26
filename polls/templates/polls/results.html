@@ -25,6 +25,10 @@
       </div>
   {% endfor %}
 </ul>
-
-<a href="{% url 'polls:detail' object.id %}">Vote again?</a>
+<h3>Comments</h3>
+{% for comment in comments %}
+<p>{{comment.text}}</p>
+<p>{{comment.date}}</p>
+<hr/>
+{% endfor %}
 {% endblock %}
