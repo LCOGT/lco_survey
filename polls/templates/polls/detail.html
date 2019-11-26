@@ -22,27 +22,24 @@
   please tell us how much you agree with these statements.</p>
 <form action="{% url 'polls:vote' object.id %}" method="post">
 {% csrf_token %}
-{% regroup questions by question__text as question_list %}
-
-  {% for question in question_list %}
-      <h3>{{ question.grouper }}</h3>
-      <div class="question-box">
-          <div class="emoji-row">
-          {% for choice in question.list %}
-          <div class="emoji-container">
-          <label for="choice{{ forloop.counter }}-{{choice.id}}">
-            <input type="radio" name="question-{{choice.question_id}}" id="choice{{ forloop.counter }}-{{choice.id}}" value="{{ choice.id }}" />
-            <img src="{% static choice.icon %}" />
-          </label>
-          <div class="choice">
-            {{ choice.text }}
-          </div>
-          </div>
-          {% endfor %}
-          </div>
+{% for question in questions %}
+    <h2>{{ question.text }}</h2>
+    <div class="question-box">
+      <div class="emoji-row">
+        {% for choice in question.choices %}
+        <div class="emoji-container">
+        <label for="choice{{ forloop.counter }}-{{choice.id}}">
+          <input type="radio" name="question-{{question.question_id}}" id="choice{{ forloop.counter }}-{{choice.id}}" value="{{ choice.id }}" />
+          <img src="{% static choice.icon %}" />
+        </label>
+        <div class="choice">
+          {{ choice.text }}
+        </div>
+        </div>
+        {% endfor %}
       </div>
-  {% endfor %}
-
+  </div>
+{% endfor %}
 <h3>Comments [optional]</h3>
 <p><textarea name="comment" style="width:80%;height:100px;" placeholder="Please give us any other comments"></textarea></p>
 <input type="submit" value="Vote" class="button button1" />
@@ -50,6 +47,5 @@
 </form>
 {% endif %}
 </p>
-<p>All information is stored anonymously and cannot be linked to individuals. Your feedback will be used internally for improving our resources and fundraising for the LCO education program. We do not use this information for sociological or education theory research.</p>
 
 {% endblock %}
