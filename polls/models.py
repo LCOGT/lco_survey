@@ -27,7 +27,7 @@ class Survey(models.Model):
     cookie_name = models.CharField(max_length=20, help_text="Should start 'lcosvy_'")
 
     def __str__(self):
-        return "{} {} - {}".format(self.name, self.startdate.strftime("%Y-%m-%d"), self.enddate.strftime("%Y-%m-%d"))
+        return "{}".format(self.name)
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

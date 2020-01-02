@@ -6,28 +6,27 @@
 
 <h2>{{object.startdate}} &rarr; {{object.enddate}}</h2>
 
-{% regroup answers by question__text as question_list %}
-
 <ul>
-  {% for question in question_list %}
-      <h3>{{ question.grouper }}</h3>
+  {% for question in answers %}
+      <h3>{{ question.text }}</h3>
       <div class="question-box">
-          <div class="emoji-row">
-          {% for choice in question.list %}
+        <div class="emoji-row">
+          {% for choice in question.choices %}
           <div class="emoji-container">
-          <div class="emoji">
             <img src="{% static choice.icon %}" />
+          <div class="choice">
+            {{ choice.text }}
           </div>
           <div class="votes">
-            {{ choice.votes }} vote{{ choice.votes|pluralize }}
+            {{choice.votes}}
           </div>
           </div>
           {% endfor %}
-          </div>
-      </div>
+        </div>
+    </div>
   {% endfor %}
 </ul>
-<h3>Comments</h3>
+<h2>Comments</h2>
 {% for comment in comments %}
 <p>{{comment.text}}</p>
 <p>{{comment.date}}</p>

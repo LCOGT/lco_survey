@@ -32,20 +32,7 @@ class DetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the questions
-        questions = Question.objects.filter(survey=self.object).distinct()
-        qs = []
-
-        for q in questions:
-            tmp_q = {}
-            tmp_q['id'] = q.id
-            tmp_q['text'] = q.text
-            choices = Choice.objects.filter(question=q.id,survey=self.object).order_by('choice')
-            ch_tmp = []
-            for ch in choices:
-                ch_tmp.append({'text' : ch.get_choice_display(), 'id':ch.id,'icon':LIKERT_ICONS[ch.choice]})
-            tmp_q['choices'] = ch_tmp
-            qs.append(tmp_q)
-        context['questions'] = qs
+        context['questions'] = question_list(self.object)
         cookie = self.request.COOKIES.get(self.object.cookie_name, None)
         if cookie and cookie == str(self.object.id):
             context['answered'] = True
@@ -59,15 +46,25 @@ class ResultsView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        answers = self.object.choice_set.all().values('question_id','question__text','choice','id','votes')
-        qs = []
-        for a in answers:
-            tmpq = a
-            tmpq['icon'] = LIKERT_ICONS[a['choice']]
-            qs.append(tmpq)
-        context['answers'] = qs
+        context['answers'] = question_list(self.object)
         context['comments'] = Comment.objects.filter(survey=self.object)
         return context
+
+def question_list(survey):
+    questions = Question.objects.filter(survey=survey).distinct()
+    qs = []
+
+    for q in questions:
+        tmp_q = {}
+        tmp_q['id'] = q.id
+        tmp_q['text'] = q.text
+        choices = Choice.objects.filter(question=q.id,survey=survey).order_by('choice')
+        ch_tmp = []
+        for ch in choices:
+            ch_tmp.append({'text' : ch.get_choice_display(), 'id':ch.id,'icon':LIKERT_ICONS[ch.choice],'votes':ch.votes})
+        tmp_q['choices'] = ch_tmp
+        qs.append(tmp_q)
+    return qs
 
 def vote(request, id):
     error = None
