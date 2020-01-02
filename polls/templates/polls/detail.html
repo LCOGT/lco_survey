@@ -23,7 +23,7 @@
 <form action="{% url 'polls:vote' object.id %}" method="post">
 {% csrf_token %}
 {% for question in questions %}
-    <h2>{{ question.text }}</h2>
+    <h2>{{ question.question__text }}</h2>
     <div class="question-box">
       <div class="emoji-row">
         {% for choice in question.choices %}

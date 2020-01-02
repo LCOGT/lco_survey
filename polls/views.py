@@ -46,7 +46,6 @@ class DetailView(generic.DetailView):
             tmp_q['choices'] = ch_tmp
             qs.append(tmp_q)
         context['questions'] = qs
-        context['questions'] = qs
         cookie = self.request.COOKIES.get(self.object.cookie_name, None)
         if cookie and cookie == str(self.object.id):
             context['answered'] = True
