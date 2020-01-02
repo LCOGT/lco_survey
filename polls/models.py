@@ -19,12 +19,12 @@ class Question(models.Model):
 
 class Survey(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(default='', max_length=20)
+    name = models.CharField(default='', max_length=40)
     active = models.BooleanField(default=False)
     startdate = models.DateTimeField()
     enddate = models.DateTimeField()
     answer = models.ManyToManyField(Question, through="Choice")
-    cookie_name = models.CharField(max_length=20, help_text="Should start 'lco_fb_'")
+    cookie_name = models.CharField(max_length=20, help_text="Should start 'lcosvy_'")
 
     def __str__(self):
         return "{} {} - {}".format(self.name, self.startdate.strftime("%Y-%m-%d"), self.enddate.strftime("%Y-%m-%d"))

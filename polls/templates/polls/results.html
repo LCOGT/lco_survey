@@ -4,6 +4,8 @@
 {% block main_content %}
 <h1>{{ object.name }} Feedback</h1>
 
+<h2>{{object.startdate}} &rarr; {{object.enddate}}</h2>
+
 {% regroup answers by question__text as question_list %}
 
 <ul>

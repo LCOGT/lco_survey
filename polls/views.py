@@ -12,10 +12,10 @@ from .models import Choice, Question, Survey, LIKERT_CHOICES, LIKERT_ICONS, Comm
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
-    context_object_name = 'active_survey_list'
+    context_object_name = 'survey_list'
 
     def get_queryset(self):
-        return Survey.objects.filter(active=True)
+        return Survey.objects.all()
 
 class ThanksView(generic.DetailView):
     slug_url_kwarg = 'id'
@@ -32,17 +32,17 @@ class DetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the questions
-        questions = Survey.objects.all()[0].choice_set.all().values('survey','question_id','question__text').distinct()
+        questions = Question.objects.filter(survey=self.object).distinct()
         qs = []
-        lk_choices = dict(LIKERT_CHOICES)
 
         for q in questions:
-            tmp_q = dict(q)
-            choices = list(Choice.objects.filter(question=q['question_id'],survey=q['survey']).values_list('choice','id').order_by('choice').distinct())
-            c_dict = {cs[0]:cs[1]for cs in choices}
+            tmp_q = {}
+            tmp_q['id'] = q.id
+            tmp_q['text'] = q.text
+            choices = Choice.objects.filter(question=q.id,survey=self.object).order_by('choice')
             ch_tmp = []
             for ch in choices:
-                ch_tmp.append({'text' : lk_choices[ch[0]], 'id':ch[1],'icon':LIKERT_ICONS[ch[0]]})
+                ch_tmp.append({'text' : ch.get_choice_display(), 'id':ch.id,'icon':LIKERT_ICONS[ch.choice]})
             tmp_q['choices'] = ch_tmp
             qs.append(tmp_q)
         context['questions'] = qs

@@ -4,16 +4,18 @@
 <h1>Educational Feedback</h1>
 <p>This website is to help collect feedback about all educational programs which make use of Las Cumbres Observatory resources. For more infomation about our education resources and program visit the <a href="https://lco.global/education/">Education pages of the LCO website</a>.</p>
 <h2>Surveys actively seeking responses</h2>
-{% if active_survey_list %}
+{% if survey_list %}
   <p>
-    {% for poll in active_survey_list %}
+    {% for poll in survey_list %}
+    {% if poll.active %}
 		<a href="{% url 'polls:detail' poll.id %}" class="button button1">{{ poll.name }}</a>
+    {% endif %}
     {% endfor %}
   </p>
     {% if user.is_authenticated %}
     <h2>Results</h2>
     <p>
-    {% for poll in active_survey_list %}
+    {% for poll in survey_list %}
     <a href="{% url 'polls:results' poll.id %}" class="button button1">{{ poll.name }}</a>
     {% endfor %}
     </p>
